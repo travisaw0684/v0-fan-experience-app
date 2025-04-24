@@ -15,7 +15,7 @@ A Next.js application for football fans to connect, follow teams, and discuss ma
 - Next.js 15
 - React 19
 - Tailwind CSS 4
-- MySQL with Prisma ORM
+- PostgreSQL with Neon and Prisma ORM
 - NextAuth.js for authentication
 
 ## Getting Started
@@ -23,7 +23,7 @@ A Next.js application for football fans to connect, follow teams, and discuss ma
 ### Prerequisites
 
 - Node.js 18+ and npm/pnpm
-- MySQL database
+- PostgreSQL database (or Neon account)
 
 ### Environment Setup
 
@@ -32,7 +32,7 @@ A Next.js application for football fans to connect, follow teams, and discuss ma
 
 \`\`\`
 # Database connection
-DATABASE_URL="mysql://username:password@localhost:3306/football_fan_hub"
+DATABASE_URL="postgresql://username:password@localhost:5432/football_fan_hub"
 
 # Next Auth
 NEXTAUTH_SECRET="your-secret-key-here"
