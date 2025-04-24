@@ -1,12 +1,42 @@
+"use client"
+
+import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Trophy } from "lucide-react"
+import { registerUser } from "../actions/auth"
 
 export default function SignupPage() {
+  const router = useRouter()
+  const [error, setError] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleSubmit(formData: FormData) {
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const result = await registerUser(formData)
+
+      if (result.error) {
+        setError(result.error)
+        return
+      }
+
+      // Redirect to login page on success
+      router.push("/login?registered=true")
+    } catch (error) {
+      setError("An unexpected error occurred. Please try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className="flex min-h-screen flex-col">
       <div className="flex flex-1 items-center justify-center py-12">
@@ -19,32 +49,26 @@ export default function SignupPage() {
             <CardDescription>Enter your information to get started</CardDescription>
           </CardHeader>
           <CardContent>
-            <form>
+            <form action={handleSubmit}>
               <div className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="first-name">First name</Label>
-                    <Input id="first-name" placeholder="John" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="last-name">Last name</Label>
-                    <Input id="last-name" placeholder="Doe" required />
-                  </div>
+                <div className="space-y-2">
+                  <Label htmlFor="name">Full name</Label>
+                  <Input id="name" name="name" placeholder="John Doe" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="m@example.com" required />
+                  <Input id="email" name="email" type="email" placeholder="m@example.com" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
-                  <Input id="password" type="password" required />
+                  <Input id="password" name="password" type="password" required />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="confirm-password">Confirm password</Label>
                   <Input id="confirm-password" type="password" required />
                 </div>
                 <div className="flex items-center space-x-2">
-                  <Checkbox id="terms" />
+                  <Checkbox id="terms" required />
                   <Label htmlFor="terms" className="text-sm">
                     I agree to the{" "}
                     <Link href="/terms" className="text-primary hover:underline">
@@ -52,8 +76,9 @@ export default function SignupPage() {
                     </Link>
                   </Label>
                 </div>
-                <Button type="submit" className="w-full">
-                  Create Account
+                {error && <div className="text-sm text-red-500">{error}</div>}
+                <Button type="submit" className="w-full" disabled={isLoading}>
+                  {isLoading ? "Creating Account..." : "Create Account"}
                 </Button>
               </div>
             </form>

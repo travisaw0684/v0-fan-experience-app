@@ -1,30 +1,88 @@
-# Next.js portal
+# Football Fan Portal
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+A Next.js application for football fans to connect, follow teams, and discuss matches.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/travis-walkers-projects/v0-next-js-portal)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/Y8LkYAZTGlH)
+## Features
 
-## Overview
+- User authentication
+- Team profiles and following
+- Match schedules and details
+- User posts and comments
+- Interactive UI with Tailwind CSS
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+## Tech Stack
 
-## Deployment
+- Next.js 15
+- React 19
+- Tailwind CSS 4
+- MySQL with Prisma ORM
+- NextAuth.js for authentication
 
-Your project is live at:
+## Getting Started
 
-**[https://vercel.com/travis-walkers-projects/v0-next-js-portal](https://vercel.com/travis-walkers-projects/v0-next-js-portal)**
+### Prerequisites
 
-## Build your app
+- Node.js 18+ and npm/pnpm
+- MySQL database
 
-Continue building your app on:
+### Environment Setup
 
-**[https://v0.dev/chat/projects/Y8LkYAZTGlH](https://v0.dev/chat/projects/Y8LkYAZTGlH)**
+1. Clone the repository
+2. Create a `.env` file in the root directory with the following variables:
 
-## How It Works
+\`\`\`
+# Database connection
+DATABASE_URL="mysql://username:password@localhost:3306/football_fan_hub"
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+# Next Auth
+NEXTAUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
+\`\`\`
+
+### Installation
+
+\`\`\`bash
+# Install dependencies
+npm install
+# or
+pnpm install
+
+# Generate Prisma client
+npx prisma generate
+
+# Run database migrations
+npx prisma migrate dev
+
+# Seed the database
+npx prisma db seed
+
+# Start the development server
+npm run dev
+# or
+pnpm dev
+\`\`\`
+
+## Database Schema
+
+The application uses the following database models:
+
+- User - User accounts and authentication
+- Profile - Extended user information
+- Team - Football team information
+- Match - Match schedules and results
+- Post - User-generated content
+- Comment - Responses to posts
+- Like - User interactions with posts
+- TeamFollow - User following teams
+
+## Development
+
+### Available Scripts
+
+- `npm run dev` - Start the development server
+- `npm run build` - Build the application for production
+- `npm run start` - Start the production server
+- `npm run prisma:generate` - Generate Prisma client
+- `npm run prisma:migrate` - Run database migrations
+- `npm run prisma:studio` - Open Prisma Studio to manage database
+- `npm run db:seed` - Seed the database with initial data

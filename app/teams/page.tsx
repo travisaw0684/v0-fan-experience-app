@@ -1,10 +1,10 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Trophy, Search, Users, Star, Share2 } from "lucide-react"
+import { Trophy, Search, Users } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { TeamsGrid } from "@/components/teams-grid"
 
 export default function TeamsPage() {
   return (
@@ -19,7 +19,7 @@ export default function TeamsPage() {
             <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
               Home
             </Link>
-            <Link href="/discover" className="text-sm font-medium transition-colors hover:text-primary">
+            <Link href="/matches" className="text-sm font-medium transition-colors hover:text-primary">
               Matches
             </Link>
             <Link href="/teams" className="text-sm font-medium transition-colors hover:text-primary">
@@ -61,43 +61,23 @@ export default function TeamsPage() {
             </TabsList>
 
             <TabsContent value="premier">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {premierLeagueTeams.map((team, i) => (
-                  <TeamCard key={i} team={team} />
-                ))}
-              </div>
+              <TeamsGrid league="Premier League" />
             </TabsContent>
 
             <TabsContent value="laliga">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {laLigaTeams.map((team, i) => (
-                  <TeamCard key={i} team={team} />
-                ))}
-              </div>
+              <TeamsGrid league="La Liga" />
             </TabsContent>
 
             <TabsContent value="bundesliga">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {bundesligaTeams.map((team, i) => (
-                  <TeamCard key={i} team={team} />
-                ))}
-              </div>
+              <TeamsGrid league="Bundesliga" />
             </TabsContent>
 
             <TabsContent value="seriea">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {serieATeams.map((team, i) => (
-                  <TeamCard key={i} team={team} />
-                ))}
-              </div>
+              <TeamsGrid league="Serie A" />
             </TabsContent>
 
             <TabsContent value="ligue1">
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                {ligue1Teams.map((team, i) => (
-                  <TeamCard key={i} team={team} />
-                ))}
-              </div>
+              <TeamsGrid league="Ligue 1" />
             </TabsContent>
           </Tabs>
 
@@ -159,90 +139,3 @@ export default function TeamsPage() {
     </div>
   )
 }
-
-function TeamCard({ team }: { team: { name: string; followers: string } }) {
-  return (
-    <Card className="overflow-hidden">
-      <div className="relative">
-        <Image
-          src="/placeholder.svg?height=150&width=300"
-          width={300}
-          height={150}
-          alt={team.name}
-          className="aspect-video w-full object-cover"
-        />
-      </div>
-      <CardHeader>
-        <CardTitle className="line-clamp-1">{team.name}</CardTitle>
-        <CardDescription className="flex items-center gap-1">
-          <Users className="h-3 w-3" /> {team.followers} followers
-        </CardDescription>
-      </CardHeader>
-      <CardFooter className="border-t p-2">
-        <div className="flex w-full justify-between">
-          <Button variant="ghost" size="sm" className="gap-1">
-            <Star className="h-4 w-4" /> Follow
-          </Button>
-          <Button variant="ghost" size="sm" className="gap-1">
-            <Share2 className="h-4 w-4" /> Share
-          </Button>
-        </div>
-      </CardFooter>
-    </Card>
-  )
-}
-
-const premierLeagueTeams = [
-  { name: "Manchester United", followers: "2.3M" },
-  { name: "Liverpool", followers: "2.1M" },
-  { name: "Manchester City", followers: "1.9M" },
-  { name: "Chelsea", followers: "1.8M" },
-  { name: "Arsenal", followers: "1.7M" },
-  { name: "Tottenham Hotspur", followers: "1.5M" },
-  { name: "Newcastle United", followers: "1.2M" },
-  { name: "Aston Villa", followers: "950K" },
-]
-
-const laLigaTeams = [
-  { name: "Real Madrid", followers: "2.5M" },
-  { name: "Barcelona", followers: "2.4M" },
-  { name: "Atletico Madrid", followers: "1.6M" },
-  { name: "Sevilla", followers: "980K" },
-  { name: "Valencia", followers: "870K" },
-  { name: "Real Betis", followers: "750K" },
-  { name: "Villarreal", followers: "680K" },
-  { name: "Athletic Bilbao", followers: "620K" },
-]
-
-const bundesligaTeams = [
-  { name: "Bayern Munich", followers: "2.2M" },
-  { name: "Borussia Dortmund", followers: "1.9M" },
-  { name: "RB Leipzig", followers: "1.1M" },
-  { name: "Bayer Leverkusen", followers: "890K" },
-  { name: "Borussia Mönchengladbach", followers: "780K" },
-  { name: "VfL Wolfsburg", followers: "650K" },
-  { name: "Eintracht Frankfurt", followers: "620K" },
-  { name: "FC Schalke 04", followers: "580K" },
-]
-
-const serieATeams = [
-  { name: "Juventus", followers: "1.9M" },
-  { name: "AC Milan", followers: "1.8M" },
-  { name: "Inter Milan", followers: "1.7M" },
-  { name: "AS Roma", followers: "1.3M" },
-  { name: "Napoli", followers: "1.1M" },
-  { name: "Lazio", followers: "890K" },
-  { name: "Atalanta", followers: "720K" },
-  { name: "Fiorentina", followers: "650K" },
-]
-
-const ligue1Teams = [
-  { name: "Paris Saint-Germain", followers: "2.0M" },
-  { name: "Olympique Marseille", followers: "1.2M" },
-  { name: "Olympique Lyonnais", followers: "1.1M" },
-  { name: "AS Monaco", followers: "890K" },
-  { name: "LOSC Lille", followers: "720K" },
-  { name: "OGC Nice", followers: "580K" },
-  { name: "Stade Rennais", followers: "520K" },
-  { name: "RC Lens", followers: "480K" },
-]
