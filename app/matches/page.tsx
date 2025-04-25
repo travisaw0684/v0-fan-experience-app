@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardFooter } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Trophy, Calendar, Clock, MapPin, Users } from "lucide-react"
+import { Trophy, Calendar, Clock, MapPin, Users, Star } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { MatchesGrid } from "@/components/matches-grid"
 
 export default function MatchesPage() {
   return (
@@ -20,7 +19,7 @@ export default function MatchesPage() {
             <Link href="/" className="text-sm font-medium transition-colors hover:text-primary">
               Home
             </Link>
-            <Link href="/matches" className="text-sm font-medium transition-colors hover:text-primary">
+            <Link href="/discover" className="text-sm font-medium transition-colors hover:text-primary">
               Matches
             </Link>
             <Link href="/teams" className="text-sm font-medium transition-colors hover:text-primary">
@@ -52,30 +51,50 @@ export default function MatchesPage() {
           <Tabs defaultValue="all">
             <TabsList className="mb-8">
               <TabsTrigger value="all">All Matches</TabsTrigger>
-              <TabsTrigger value="premier">Premier League</TabsTrigger>
-              <TabsTrigger value="champions">Champions League</TabsTrigger>
-              <TabsTrigger value="laliga">La Liga</TabsTrigger>
-              <TabsTrigger value="bundesliga">Bundesliga</TabsTrigger>
+              <TabsTrigger value="today">Today</TabsTrigger>
+              <TabsTrigger value="tomorrow">Tomorrow</TabsTrigger>
+              <TabsTrigger value="weekend">This Weekend</TabsTrigger>
+              <TabsTrigger value="week">This Week</TabsTrigger>
             </TabsList>
 
             <TabsContent value="all">
-              <MatchesGrid upcoming={true} />
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {matches.map((match, i) => (
+                  <MatchCard key={i} match={match} />
+                ))}
+              </div>
             </TabsContent>
 
-            <TabsContent value="premier">
-              <MatchesGrid competition="Premier League" upcoming={true} />
+            <TabsContent value="today">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {matches.slice(0, 3).map((match, i) => (
+                  <MatchCard key={i} match={{ ...match, date: "Today" }} />
+                ))}
+              </div>
             </TabsContent>
 
-            <TabsContent value="champions">
-              <MatchesGrid competition="Champions League" upcoming={true} />
+            <TabsContent value="tomorrow">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {matches.slice(3, 6).map((match, i) => (
+                  <MatchCard key={i} match={{ ...match, date: "Tomorrow" }} />
+                ))}
+              </div>
             </TabsContent>
 
-            <TabsContent value="laliga">
-              <MatchesGrid competition="La Liga" upcoming={true} />
+            <TabsContent value="weekend">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {matches.slice(6, 9).map((match, i) => (
+                  <MatchCard key={i} match={{ ...match, date: "Saturday, Jul 15" }} />
+                ))}
+              </div>
             </TabsContent>
 
-            <TabsContent value="bundesliga">
-              <MatchesGrid competition="Bundesliga" upcoming={true} />
+            <TabsContent value="week">
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {matches.map((match, i) => (
+                  <MatchCard key={i} match={match} />
+                ))}
+              </div>
             </TabsContent>
           </Tabs>
 
@@ -160,3 +179,145 @@ export default function MatchesPage() {
     </div>
   )
 }
+
+function MatchCard({
+  match,
+}: {
+  match: {
+    homeTeam: string
+    awayTeam: string
+    competition: string
+    date: string
+    time: string
+    venue: string
+  }
+}) {
+  return (
+    <Card className="overflow-hidden">
+      <CardHeader className="pb-2">
+        <div className="flex justify-between items-center">
+          <Badge variant="outline">{match.competition}</Badge>
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <Calendar className="h-3 w-3" /> {match.date}
+          </div>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-3 gap-2 items-center py-4">
+          <div className="text-center">
+            <Image
+              src="/placeholder.svg?height=60&width=60"
+              width={60}
+              height={60}
+              alt={match.homeTeam}
+              className="mx-auto mb-2"
+            />
+            <h3 className="font-medium text-sm">{match.homeTeam}</h3>
+          </div>
+          <div className="text-center">
+            <div className="text-xl font-bold mb-1">VS</div>
+            <div className="text-xs text-muted-foreground">{match.time}</div>
+          </div>
+          <div className="text-center">
+            <Image
+              src="/placeholder.svg?height=60&width=60"
+              width={60}
+              height={60}
+              alt={match.awayTeam}
+              className="mx-auto mb-2"
+            />
+            <h3 className="font-medium text-sm">{match.awayTeam}</h3>
+          </div>
+        </div>
+        <div className="flex items-center gap-1 text-xs text-muted-foreground justify-center">
+          <MapPin className="h-3 w-3" /> {match.venue}
+        </div>
+      </CardContent>
+      <CardFooter className="border-t p-2">
+        <div className="flex w-full justify-between">
+          <Button variant="ghost" size="sm" className="gap-1">
+            <Star className="h-4 w-4" /> Remind
+          </Button>
+          <Button variant="ghost" size="sm">
+            Match Thread
+          </Button>
+        </div>
+      </CardFooter>
+    </Card>
+  )
+}
+
+const matches = [
+  {
+    homeTeam: "Manchester United",
+    awayTeam: "Liverpool",
+    competition: "Premier League",
+    date: "Tuesday, Jul 11",
+    time: "15:00 GMT",
+    venue: "Old Trafford",
+  },
+  {
+    homeTeam: "Arsenal",
+    awayTeam: "Chelsea",
+    competition: "Premier League",
+    date: "Tuesday, Jul 11",
+    time: "17:30 GMT",
+    venue: "Emirates Stadium",
+  },
+  {
+    homeTeam: "Barcelona",
+    awayTeam: "Real Madrid",
+    competition: "La Liga",
+    date: "Tuesday, Jul 11",
+    time: "20:00 GMT",
+    venue: "Camp Nou",
+  },
+  {
+    homeTeam: "Manchester City",
+    awayTeam: "Tottenham",
+    competition: "Premier League",
+    date: "Wednesday, Jul 12",
+    time: "15:00 GMT",
+    venue: "Etihad Stadium",
+  },
+  {
+    homeTeam: "Juventus",
+    awayTeam: "AC Milan",
+    competition: "Serie A",
+    date: "Wednesday, Jul 12",
+    time: "17:30 GMT",
+    venue: "Allianz Stadium",
+  },
+  {
+    homeTeam: "Bayern Munich",
+    awayTeam: "Borussia Dortmund",
+    competition: "Bundesliga",
+    date: "Wednesday, Jul 12",
+    time: "19:45 GMT",
+    venue: "Allianz Arena",
+  },
+  {
+    homeTeam: "PSG",
+    awayTeam: "Marseille",
+    competition: "Ligue 1",
+    date: "Saturday, Jul 15",
+    time: "16:00 GMT",
+    venue: "Parc des Princes",
+  },
+  {
+    homeTeam: "Atletico Madrid",
+    awayTeam: "Sevilla",
+    competition: "La Liga",
+    date: "Saturday, Jul 15",
+    time: "18:15 GMT",
+    venue: "Wanda Metropolitano",
+  },
+  {
+    homeTeam: "Inter Milan",
+    awayTeam: "Napoli",
+    competition: "Serie A",
+    date: "Saturday, Jul 15",
+    time: "20:45 GMT",
+    venue: "San Siro",
+  },
+]
